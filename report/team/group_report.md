@@ -27,7 +27,9 @@ Dependency `streamlit>=1.67,<2`; đã kiểm tra bản 1.67.0. Có script `start
 
 **Link dùng thử (deploy):**
 
-https://writing-what-vat-dedicated.trycloudflare.com — quick tunnel tới cổng demo 8511, có mã dùng thử do Bình cung cấp riêng. Link đã trả HTTP 200; agent API trên server chia sẻ bị tắt. Link chỉ còn hoạt động khi máy host/UI/tunnel chạy; cập nhật URL khi khởi động lại tunnel. Chưa có xác nhận người ngoài nhóm thử.
+https://writing-what-vat-dedicated.trycloudflare.com — quick tunnel tới cổng demo 8511, có mã dùng thử do Bình cung cấp riêng. Link đã trả HTTP 200; agent API trên server chia sẻ bị tắt. Link chỉ còn hoạt động khi máy host/UI/tunnel chạy; cập nhật URL khi khởi động lại tunnel.
+
+**Người ngoài nhóm đã thử:** Minh (lớp L3B, ngoài nhóm Hehehe) dùng UI trên laptop/Chrome ngày 11/11/2026, 10:31–10:35. Minh chạy đủ 5 câu mẫu ở A3 và tự hỏi thêm 2 câu; không gặp lỗi khi mở UI. Kết quả và nhận xét ở B4, mục "Người ngoài nhóm dùng thử"; [transcript](../../starter_v0/transcripts/cp5-team-ui_3f8ee7106ccf40ce9046f9521ed981c3.transcript.json).
 
 ### A2. Tool agent có
 
@@ -58,7 +60,7 @@ https://writing-what-vat-dedicated.trycloudflare.com — quick tunnel tới cổ
 
 ## 3. Giải pháp
 
-- Tiệp tối ưu CP2 qua v1–v3; giữ nguyên các run/metric ở B1. Hà Anh triển khai 4 tool mới ở CP3; Nghĩa hoàn thiện 10 case của CP4 ở B3.
+- Tiệp tối ưu CP2 qua v1–v3; giữ nguyên các run/metric ở B1. Hà Anh triển khai 4 tool mới ở CP3; Nghĩa hoàn thiện 10 case của CP4 ở B3 và tổ chức buổi thử UI với người ngoài nhóm cho CP5 (B4).
 - CP5: Codex triển khai theo yêu cầu Bình trên main `a557a55`; UI dùng cùng `run_model_tool_loop` của `chat.py`, prompt/declaration/registry 14 tool của nhóm. Không áp dụng lại prompt, dedup hoặc bộ case ở bản local tự thử trước đó.
 - UI tách phiên, lưu/download JSON, hiện lỗi tool/provider, giới hạn lượt/input/vòng và có mã demo tùy chọn.
 
@@ -194,6 +196,34 @@ Nguồn: [transcript CLI CP5](../../starter_v0/transcripts/cp5-team-live_openai_
 
 **UI runtime:** [transcript](../../starter_v0/transcripts/cp5-team-ui_5133d9521b474828bbe6b38e8acc442f.transcript.json) chứng minh `deduplicate_sources(strategy="url")` chạy thật trên main: 2 nguồn còn 1. Đã kiểm tra đăng nhập mã demo, danh sách 14 tool, JSON download và reset; chi tiết ở [QA](../../starter_v0/analysis/cp5_team_qa.md).
 
+**Người ngoài nhóm dùng thử (CP5 self-check):** Minh, lớp L3B, không thuộc nhóm; đồng ý cho ghi tên vào báo cáo. Laptop, Chrome, ngày 11/11/2026 10:31–10:35. Nguồn: [transcript UI](../../starter_v0/transcripts/cp5-team-ui_3f8ee7106ccf40ce9046f9521ed981c3.transcript.json) (9 lượt, `cp5-team+p0d8d6477582f+t835122e42569`, OpenAI `gpt-4o-mini`). Nghĩa phỏng vấn Minh sau buổi thử và đối chiếu từng nhận xét với transcript.
+
+| Turn | User Request | Tool Calls | Outcome (theo transcript) |
+|---|---|---|---|
+| 1 | A3-1: tìm 3 repo Python về research agent | `github_search(query="research agent", language="Python", limit=3)` | Trả 3 repo thật kèm URL, sao, fork. Trả lời bằng tiếng Anh |
+| 2 | A3-2: chính sách đưa dữ liệu khách hàng vào AI bên ngoài | `policy(policy_area="data_privacy")` | Trả lời "không được phép", trích từ policy nội bộ |
+| 3 | A3-3: loại trùng theo URL | `deduplicate_sources(strategy="url")` | 2 nguồn còn 1 (URL có `utm_source` được chuẩn hóa) |
+| 4 | A3-4: lấy 2 bài đăng, chưa nói tài khoản | `timeline(screenname="your_account_handle")` → lỗi `JSONDecodeError`, sau đó `clarify(text)` | Cuối cùng có hỏi lại tài khoản, nhưng **đã tự đoán một handle giả trước** — vi phạm rule "không đoán tài khoản" |
+| 5 | A3-4: bổ sung "Tài khoản NASA trên X" | `timeline(screenname="NASA", limit=2)` | Trả 2 bài mới nhất của NASA kèm link |
+| 6 | A3-5: muốn gửi bản tin lên Telegram | `clarify(response_type="yes_no")` | Hỏi xác nhận, chưa gửi |
+| 7 | A3-5: "Không, hủy gửi" | không gọi tool | Xác nhận đã hủy, không gọi `send` |
+| 8 | Minh tự hỏi: 3 bài báo về AI trên arXiv trong tuần này | `papers(query="AI", max_results=3, sort_by="submittedDate")` | Route đúng `papers`, bài mới nhất (10/11). Nhưng 2/3 bài là toán (`math.NT`, `math.DG`), chỉ 1 bài `cs.LG`: query `all:AI` quá rộng; "trong tuần này" không có tham số lọc ngày |
+| 9 | Minh tự hỏi: so sánh 2 nguồn (một trang SPOJ, một link Gmail) | `fetch` × 2 | Đọc cả hai trang rồi tự so sánh trong câu trả lời, không dùng `compare_sources` (tool này cần metadata có sẵn). Link Gmail chỉ trả trang đăng nhập; agent vẫn fetch link tài khoản cá nhân mà không cảnh báo |
+
+Nhận xét của Minh (phỏng vấn sau buổi thử):
+
+- Mở link và dùng UI không gặp khó khăn; tốc độ trả lời khá nhanh.
+- 5 câu mẫu đều trả lời đúng ý, không thấy lỗi. Câu 4 có hỏi lại, câu 5 có xin xác nhận và dừng khi bảo hủy.
+- Phần hiển thị tool và arguments dưới mỗi lượt khá tường minh.
+- Chấm **4/5**. Góp ý: ô nhập prompt hay bị mất focus, nên sửa để nhập liên tục dễ hơn.
+
+Đối chiếu nhận xét với log:
+
+- Minh không thấy lỗi ở câu 4 vì UI chỉ hiện câu hỏi lại cuối cùng; transcript cho thấy agent đã gọi `timeline` với handle giả trước khi `clarify`. Đây là cùng lỗi với R10 trong run base cp5-team, chưa sửa ở CP5.
+- Câu tự hỏi (lượt 8–9) cho thấy hai giới hạn eval chưa đo: query arXiv quá rộng nên kết quả lệch chủ đề, và agent không cảnh báo khi được đưa link tài khoản riêng tư.
+- Agent hay trả lời tiếng Anh dù câu hỏi tiếng Việt (lượt 1, 3, 5, 8, 9).
+- Một người thử, một phiên: đây là bằng chứng UI dùng được bởi người ngoài nhóm, không phải đánh giá thống kê.
+
 ### B5a. Required Evidence — Tool mới, unit test, UI
 
 | Item | Evidence File | What Worked | Risk / Guardrail |
@@ -235,7 +265,7 @@ Không thực hiện, không có run local hoặc so sánh cloud/local để bá
 
 ## 6. Tổng hợp đóng góp
 
-Bình phụ trách CP1 và CP5 với hỗ trợ Codex; Tiệp phụ trách CP2; Hà Anh phụ trách CP3 và 4 tool mới; Nghĩa phụ trách CP4. Codex trực tiếp triển khai/chạy kiểm tra CP5 theo yêu cầu Bình. Chi tiết và commit nằm trong [TEAM.md](../../TEAM.md) và báo cáo cá nhân của 4 thành viên; không ghi các thao tác AI làm là thao tác mỗi người tự làm.
+Bình phụ trách CP1 và CP5 với hỗ trợ Codex; Tiệp phụ trách CP2; Hà Anh phụ trách CP3 và 4 tool mới; Nghĩa phụ trách CP4 và hỗ trợ CP5 bằng buổi thử UI với người ngoài nhóm (Minh): phỏng vấn, đối chiếu nhận xét với transcript và ghi vào A1/B4. Codex trực tiếp triển khai/chạy kiểm tra CP5 theo yêu cầu Bình. Chi tiết và commit nằm trong [TEAM.md](../../TEAM.md) và báo cáo cá nhân của 4 thành viên; không ghi các thao tác AI làm là thao tác mỗi người tự làm.
 
 ## 7. Hạn chế và hướng cải thiện — B6. Reflection
 

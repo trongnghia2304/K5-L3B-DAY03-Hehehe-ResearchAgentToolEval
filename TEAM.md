@@ -2,11 +2,12 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm: Hehehe (theo tên repo; nhóm cần xác nhận).
+- Tên nhóm: Hehehe
 - Lớp: L3B.
 - Repo nhóm: `K5-L3B-DAY03-Hehehe-ResearchAgentToolEval`.
 - URL repo: https://github.com/trongnghia2304/K5-L3B-DAY03-Hehehe-ResearchAgentToolEval
-- Nền tích hợp: main GitHub `a557a55`; CP5 bổ sung trên nhánh `vuvanbinh`. Commit chốt bài nộp sẽ là commit sau khi nhóm review và gộp CP5 vào main.
+- Nền tích hợp: main GitHub `a557a55`; CP5 bổ sung trên nhánh `vuvanbinh`.
+- Nhánh nộp: `main`. Commit chốt: `3bd3c24` (merge PR #6, đã gộp CP5 vào main; đủ CP1–CP5). Các commit sau commit này chỉ cập nhật tài liệu.
 
 ## Thành viên
 
@@ -15,7 +16,7 @@
 | 1 | Vũ Văn Bình | 2A202603831 | binhvuvan2004@gmail.com | hnib1908 | CP1: setup/baseline; CP5: UI, live chat, báo cáo và kiểm tra tích hợp với hỗ trợ Codex |
 | 2 | Nguyễn Nghiêm Khánh Tiệp | 2A202603863 | tiepnnk04@gmail.com | tiepnnk01-10 | CP2: tối ưu system prompt và tool declaration (v1–v3), version log, bảng B1 |
 | 3 | Trần Thị Hà Anh | 2A202603887 | anhtth.it.work@gmail.com | hnha02 | CP3: phát triển 4 tool mới, unit test, eval routing |
-| 4 | Nguyễn Trọng Nghĩa | 2A202603835 | nghiatrongnguyen2304@gmail.com | trongnghia2304 | CP4: viết 10 eval case nhóm, chạy suite group, bảng B3 |
+| 4 | Nguyễn Trọng Nghĩa | 2A202603835 | nghiatrongnguyen2304@gmail.com | trongnghia2304 | CP4: viết 10 eval case nhóm, chạy suite group, bảng B3; hỗ trợ CP5: phỏng vấn người dùng ngoài nhóm, ghi kết quả vào A1/B4 |
 
 Thông tin Bình đã được Bình xác nhận trong phiên hoàn thiện CP5; các thành viên khác giữ theo main GitHub.
 
@@ -100,6 +101,7 @@ Thông tin Bình đã được Bình xác nhận trong phiên hoàn thiện CP5;
 ### Phần việc phụ trách
 
 - CP4: viết bộ eval nhóm 10 case trong `starter_v0/data/eval_group.json`, chạy `--suite group` bằng provider thật và điền bảng B3.
+- Hỗ trợ CP5: nhờ người ngoài nhóm dùng thử UI, phỏng vấn sau buổi thử và ghi kết quả vào A1, B4 của báo cáo nhóm.
 
 ### Đóng góp cụ thể
 
@@ -108,6 +110,8 @@ Thông tin Bình đã được Bình xác nhận trong phiên hoàn thiện CP5;
 - Validate schema bằng code của `run_eval.py`; `pytest` 97 passed, 14 skipped, 0 failed.
 - Chạy suite group với OpenAI `gpt-4o-mini`: 10/10 case được đo, `provider_error_cases=0`, 10/10 PASS.
 - Điền bảng B3 trong báo cáo nhóm, ghi chú lý do `prompt_hash`/`tools_hash` khác dòng v3.
+- Tổ chức buổi thử UI với Minh (lớp L3B, ngoài nhóm) ngày 11/11/2026: 5 câu mẫu ở A3 và 2 câu Minh tự hỏi; phỏng vấn 9 câu (dễ dùng, đúng ý, hỏi lại, xác nhận gửi, tốc độ, hiển thị tool, điểm 4/5 và góp ý).
+- Đối chiếu nhận xét với transcript 9 lượt: phát hiện câu 4 agent đoán handle giả trước khi `clarify` (người thử không thấy trên UI), query arXiv quá rộng, fetch link Gmail không cảnh báo. Ghi vào A1, B4 và tick mục người ngoài nhóm thử trong `README.md`.
 
 ### Bằng chứng
 
@@ -116,3 +120,4 @@ Thông tin Bình đã được Bình xác nhận trong phiên hoàn thiện CP5;
 - Bảng B3 trong [báo cáo nhóm](report/team/group_report.md).
 - Báo cáo cá nhân: [`report/team/2A202603835_NguyenTrongNghia.md`](report/team/2A202603835_NguyenTrongNghia.md).
 - Commit `5d09b27` (nhánh `feat/check-point-4`); PR #3, merge commit `9fc3ddd`.
+- Phỏng vấn người dùng: [transcript UI của Minh](starter_v0/transcripts/cp5-team-ui_3f8ee7106ccf40ce9046f9521ed981c3.transcript.json); mục A1 và B4 ("Người ngoài nhóm dùng thử") trong [báo cáo nhóm](report/team/group_report.md); commit: bổ sung hash sau khi commit.

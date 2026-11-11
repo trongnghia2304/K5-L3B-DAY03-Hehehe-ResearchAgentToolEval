@@ -93,8 +93,8 @@ Cập nhật CP5 ngày 11/11/2026 trên main nhóm a557a55. [Báo cáo nhóm](re
 - [ ] Xác nhận `report/team/group_report.md` Phần A trước 16:30: không có bằng chứng mốc này; nội dung A/B đã được bổ sung và cần nhóm review trước nộp
 - [x] Mỗi thành viên có `report/team/MSSV_HoTen.md`
 
-- [ ] Có người ngoài nhóm mở link và chạy câu hỏi mẫu thành công.
-- [ ] Nhóm tự review, gộp CP5 vào main, chốt commit và nộp LMS.
+- [x] Có người ngoài nhóm mở link và chạy câu hỏi mẫu thành công.
+- [x] Nhóm tự review, gộp CP5 vào main, chốt commit và nộp LMS.
 
 **Bonus (tuỳ chọn)**
 - [ ] `send` gửi thật lên Telegram sau khi user xác nhận, có transcript chứng minh

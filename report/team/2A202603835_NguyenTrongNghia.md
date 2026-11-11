@@ -9,6 +9,7 @@
 ## 2. Phần việc phụ trách
 
 - **CP4 — Eval nhóm 10 case**: viết bộ eval của nhóm trong `starter_v0/data/eval_group.json`, chạy `--suite group` bằng provider thật và điền bảng B3 trong `report/team/group_report.md`.
+- **Hỗ trợ CP5 — phỏng vấn người dùng ngoài nhóm**: nhờ một bạn ngoài nhóm dùng thử UI, phỏng vấn sau buổi thử, đối chiếu nhận xét với transcript và ghi kết quả vào A1, B4 của `group_report.md`.
 
 ## 3. Đóng góp cụ thể
 
@@ -56,6 +57,20 @@ python run_eval.py --provider openai --version v3 --suite group --eval-cases dat
 
 Điền đủ 10 dòng trong B3 của `group_report.md`, kèm link run và ghi chú về hash.
 
+### 3.5. Phỏng vấn người dùng ngoài nhóm (hỗ trợ CP5)
+
+Mục tự kiểm tra của CP5 yêu cầu một người ngoài nhóm mở UI và chạy được câu hỏi mẫu ở A3. Trước đó nhóm chưa có bằng chứng này.
+
+- **Người thử**: Minh, lớp L3B, không thuộc nhóm Hehehe; đồng ý cho ghi tên vào báo cáo. Dùng laptop và Chrome, ngày 11/11/2026, 10:31–10:35.
+- **Kịch bản thử**: 5 câu mẫu ở A3 (tìm repo GitHub, hỏi chính sách, loại trùng URL, lấy bài đăng khi thiếu tài khoản, xin gửi Telegram rồi hủy), cộng 1–2 câu Minh tự nghĩ ra ngoài kịch bản. Minh tải transcript JSON từ UI và gửi lại.
+- **Bộ câu hỏi phỏng vấn** (9 câu): thông tin người thử và đồng ý ghi tên; khó khăn khi mở link; từng câu mẫu có đúng ý không; câu 4 có hỏi lại không; câu 5 có xin xác nhận và dừng khi hủy không; câu tự hỏi và cách agent xử lý; tốc độ; độ dễ hiểu của phần hiển thị tool; điểm 1–5 và một góp ý.
+- **Kết quả phỏng vấn**: không gặp khó khăn khi dùng; 5 câu mẫu đúng ý, không thấy lỗi; tốc độ khá nhanh; phần tool/arguments khá tường minh; chấm **4/5**; góp ý ô nhập prompt hay mất focus.
+- **Đối chiếu với transcript** (9 lượt). Mình đọc từng `tool_calls` và `tool_results` chứ không chỉ ghi lại cảm nhận của người thử, và tìm ra 3 điểm người thử không nhìn thấy trên UI:
+  - Câu 4: agent gọi `timeline(screenname="your_account_handle")` (tự đoán handle giả, bị lỗi) rồi mới `clarify`. UI chỉ hiện câu hỏi lại cuối nên Minh không thấy. Đây là cùng lỗi với R10 của run base.
+  - Câu tự hỏi về arXiv "trong tuần này": route đúng `papers` nhưng query `AI` quá rộng, 2/3 bài là toán học; không có tham số lọc ngày.
+  - Câu tự hỏi so sánh 2 link: agent `fetch` cả link Gmail cá nhân mà không cảnh báo. Ngoài ra agent hay trả lời tiếng Anh dù hỏi tiếng Việt.
+- **Ghi vào báo cáo nhóm**: A1 (thông tin buổi thử), B4 (bảng 9 lượt theo transcript, nhận xét của Minh, phần đối chiếu); tick mục "Có người ngoài nhóm mở link và chạy câu hỏi mẫu thành công" trong `README.md`.
+
 ## 4. Bằng chứng
 
 - File/commit/PR:
@@ -63,16 +78,21 @@ python run_eval.py --provider openai --version v3 --suite group --eval-cases dat
   - [Run group v3](../../starter_v0/runs/v3_B_group_openai_20261110T193821499328.json)
   - [Bảng B3 trong group report](group_report.md)
   - Commit `5d09b27` (nhánh `feat/check-point-4`); PR #3, merge commit `9fc3ddd`
+  - Phỏng vấn người dùng: [transcript UI của Minh](../../starter_v0/transcripts/cp5-team-ui_3f8ee7106ccf40ce9046f9521ed981c3.transcript.json); mục A1 và B4 ("Người ngoài nhóm dùng thử") trong [group report](group_report.md); commit: bổ sung hash sau khi commit
 - AI/công cụ đã dùng và cách tự kiểm tra kết quả:
   - Dùng Claude Code để đọc logic chấm trong `run_eval.py`, soạn nháp các case và điền B3.
+  - Dùng Claude Code để soạn kịch bản thử và bộ câu hỏi phỏng vấn, đọc transcript và soạn nháp phần A1/B4. Câu trả lời phỏng vấn là của Minh; mọi kết luận về hành vi agent đều đối chiếu với `tool_calls`/`tool_results` trong transcript.
   - Tự kiểm tra: validate schema bằng code của `run_eval.py`; chạy `pytest`; chạy eval bằng API thật; đối chiếu từng `actual_tool_calls` và `tool_results` trong run JSON với `expect`.
 
 ## 5. Tự đánh giá
 
-- **Làm được**: đủ 10 case đúng cấu trúc 5 + 5, phủ cả 4 tool mới và luồng xác nhận trước khi gửi; run hợp lệ, có bằng chứng trong repo.
+- **Làm được**: đủ 10 case đúng cấu trúc 5 + 5, phủ cả 4 tool mới và luồng xác nhận trước khi gửi; run hợp lệ, có bằng chứng trong repo. Bổ sung được bằng chứng người ngoài nhóm dùng thử UI cho CP5, kèm transcript.
 - **Hạn chế**:
   - 10/10 PASS nghĩa là bộ case chưa bắt được lỗi nào của bản v3 hiện tại, nên chưa giúp tìm giả thuyết tối ưu mới. Nếu có thêm thời gian sẽ viết case khó hơn (ví dụ yêu cầu mơ hồ giữa `lookup` và `papers`, hoặc vừa cần lọc ngày vừa cần loại trùng).
   - Case chỉ kiểm tra tool và args, không chấm nội dung câu trả lời cuối.
   - G09 PASS nhưng `send` trả lỗi `Missing TELEGRAM_BOT_TOKEN` vì `.env` chưa cấu hình Telegram; run không chứng minh có gửi tin thật.
   - `prompt_hash` của run (`0d8d6477582f`) khác dòng v3 trong `version_log.csv` (`cf429f209691`) chỉ do file được checkout với CRLF trên Windows; nội dung prompt giống v3. `tools_hash` khác vì `tools.yaml` đã thêm 4 tool mới của CP3 sau khi chạy v3.
-- **Bài học**: unit test đo code của tool, còn eval đo lựa chọn của model. Eval case nên chỉ kiểm tra những gì user nói rõ; kiểm tra quá chặt thì case fail vì diễn đạt, không phải vì agent sai.
+  - Phỏng vấn chỉ có một người thử trong một phiên, nên là bằng chứng UI dùng được chứ không phải đánh giá thống kê.
+- **Bài học**:
+  - Unit test đo code của tool, còn eval đo lựa chọn của model. Eval case nên chỉ kiểm tra những gì user nói rõ; kiểm tra quá chặt thì case fail vì diễn đạt, không phải vì agent sai.
+  - Nhận xét của người dùng và log có thể khác nhau: người thử thấy câu 4 "đúng" vì UI chỉ hiện kết quả cuối, còn transcript cho thấy agent đã đoán sai trước. Cần ghi cả hai và lấy log làm bằng chứng. Câu người dùng tự nghĩ ra (arXiv, link Gmail) lộ lỗi mà cả base eval lẫn 10 case nhóm chưa đo, có thể dùng để viết case mới.
